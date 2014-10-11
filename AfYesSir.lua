@@ -98,6 +98,12 @@ local tTravel = {
 	406286, -- Head to Touchdown Site Bravo?
 	406287, -- Head to Walker's Landing
 	406288, -- Head to Touchdown Site Bravo
+	
+	-- Enigma Chamber
+	582459, -- Enter the Enigma Chamber?
+	582460, -- Leave the Enigma Chamber?
+	582461, -- Take the elevator to the Enigma Chamber?
+	582462, -- Take the elevator to the Reception Room?
 }
 
 local strVersion = "@project-version@"
