@@ -89,6 +89,15 @@ local tTravel = {
 	561887, -- Teleport to Illium?
 	618450, -- Teleport to the Halls of the Infinite Mind?
 	618451, -- Teleport to Halls of the Infinite Mind
+	
+	-- head to.*\?$
+	405288, -- Head to Virtue's Landing?
+	405289, -- Head to Virtue's Landing
+	405294, -- Head to Sovereign's Landing?
+	406285, -- Head to Walker's Landing?
+	406286, -- Head to Touchdown Site Bravo?
+	406287, -- Head to Walker's Landing
+	406288, -- Head to Touchdown Site Bravo
 }
 
 local strVersion = "@project-version@"
@@ -170,7 +179,7 @@ end
 -----------------------------------------------------------------------------------------------
 
 function AfYesSir:OnInterfaceMenuListHasLoaded()
-	Event_FireGenericEvent("InterfaceMenuList_NewAddOn", "afYesSir", {"AfYesSir_Configure", "", "AfYesSirSprite:salute"})
+	Event_FireGenericEvent("InterfaceMenuList_NewAddOn", "afYesSir", {"AfYesSir_Configure", "", "AfYesSirSprite:afyesmenuicon"})
 end
 
 -----------------------------------------------------------------------------------------------

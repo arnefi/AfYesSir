@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Addon Author="arnefi" APIVersion="9" Name="AfYesSir" Description="Automatically answer selected dialogs" Version="0.1">
+<Addon Author="arnefi" APIVersion="9" Name="AfYesSir" Description="Automatically answer selected dialogs" Version="0.2-alpha">
     <Script Name="AfYesSir.lua"/>
     <Form Name="AfYesSir.xml"/>
     <Script Name="libs\GeminiHook\GeminiHook-1.0.lua"/>
