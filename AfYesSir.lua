@@ -6,17 +6,21 @@
 require "Apollo"
 require "Window"
 require "CSIsLib" 
- 
+
+
 -----------------------------------------------------------------------------------------------
 -- AfYesSir Module Definition
 -----------------------------------------------------------------------------------------------
+
 -- local AfYesSir = {} 
 AfYesSir = Apollo.GetPackage("Gemini:Addon-1.0").tPackage:NewAddon("AfYesSir", false, {}, "Gemini:Hook-1.0")
 -- local L = Apollo.GetPackage("Gemini:Locale-1.0").tPackage:GetLocale("AfYesSir", true)
+
  
 -----------------------------------------------------------------------------------------------
 -- Constants
 -----------------------------------------------------------------------------------------------
+
 local tTravel = {
 	-- travel.*\?$
 	254998, -- Celestion
@@ -108,15 +112,19 @@ local tTravel = {
 
 local strVersion = "@project-version@"
 
+
 -----------------------------------------------------------------------------------------------
 -- Initialization
 -----------------------------------------------------------------------------------------------
+
 function AfYesSir:new(o)
     o = o or {}
     setmetatable(o, self)
     self.__index = self 
 
 	o.topress = 0
+	
+	-- category defaults
 	o.doTravel = true
 
     return o
@@ -136,6 +144,7 @@ end
 -----------------------------------------------------------------------------------------------
 -- AfYesSir OnLoad
 -----------------------------------------------------------------------------------------------
+
 function AfYesSir:OnLoad()
     -- load our form file
 	self.xmlDoc = XmlDoc.CreateFromFile("AfYesSir.xml")
@@ -146,8 +155,8 @@ end
 -----------------------------------------------------------------------------------------------
 -- AfYesSir OnDocLoaded
 -----------------------------------------------------------------------------------------------
-function AfYesSir:OnDocLoaded()
 
+function AfYesSir:OnDocLoaded()
 	if self.xmlDoc ~= nil and self.xmlDoc:IsLoaded() then
 	    self.wndMain = Apollo.LoadForm(self.xmlDoc, "AfYesSirForm", nil, self)
 		if self.wndMain == nil then
@@ -157,6 +166,7 @@ function AfYesSir:OnDocLoaded()
 		
 		self.wndMain:Show(false, true)
 		
+		-- localize window
 		local L = Apollo.GetPackage("Gemini:Locale-1.0").tPackage:GetLocale("AfYesSir", true)
 		self.wndMain:FindChild("lblDescription"):SetText(L["lblDescription"])
 		self.wndMain:FindChild("chkTransport"):SetText(L["chkTransport"])
@@ -172,7 +182,7 @@ function AfYesSir:OnDocLoaded()
 		Apollo.RegisterEventHandler("AfYesSir_Configure", "Configure", self)
 		Apollo.RegisterEventHandler("InterfaceMenuListHasLoaded", "OnInterfaceMenuListHasLoaded", self)
 
-		self.timer = ApolloTimer.Create(5.0, false, "DelayHook", self)
+		self.timer = ApolloTimer.Create(10.0, false, "DelayHook", self)
 		self.presstimer = ApolloTimer.Create(0.1, true, "Press", self)
 		
 		-- Do additional Addon initialization here
@@ -187,6 +197,7 @@ end
 function AfYesSir:OnInterfaceMenuListHasLoaded()
 	Event_FireGenericEvent("InterfaceMenuList_NewAddOn", "afYesSir", {"AfYesSir_Configure", "", "AfYesSirSprite:afyesmenuicon"})
 end
+
 
 -----------------------------------------------------------------------------------------------
 -- AfYesSir OnSave: save settings
@@ -211,18 +222,25 @@ function AfYesSir:OnRestore(eType, tSavedData)
 		if tSavedData.doTravel ~= nil then self.doTravel = tSavedData.doTravel end
 	end
 end
+
+
 -----------------------------------------------------------------------------------------------
--- AfYesSir Functions
+-- AfYesSir DelayHook: let other great addons grab a hook first
 -----------------------------------------------------------------------------------------------
--- Define general functions here
 
 function AfYesSir:DelayHook()
 	self:RawHook(Apollo.GetAddon("CSI"), "BuildYesNo")
 	self.timer = nil
 end
 
+
+-----------------------------------------------------------------------------------------------
+-- AfYesSir BuildYesNo: test whether to react on window, otherwise call original function
+-----------------------------------------------------------------------------------------------
+
 function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
 	if (bShow) then
+		-- print question to sytem chat. To be removed in later versions.
 		self:log(tActiveCSI.strContext)
 		if self:ShoudIPress(tActiveCSI.strContext) then
 			self.topress = 20
@@ -231,11 +249,18 @@ function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
 			self.topress = 0
 			self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
 		end
+	else
+		self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
 	end
 end
 
 
+-----------------------------------------------------------------------------------------------
+-- AfYesSir ShouldIPress: check for strMessage in our category tables
+-----------------------------------------------------------------------------------------------
+
 function AfYesSir:ShoudIPress(strMessage)
+	-- Category Transportation
 	if self.doTravel then
 		for _, id in pairs(tTravel) do
 			if strMessage == Apollo.GetString(id) then return true end
@@ -244,6 +269,10 @@ function AfYesSir:ShoudIPress(strMessage)
 	return false
 end
 
+
+-----------------------------------------------------------------------------------------------
+-- AfYesSir Press: waiting for CSI to be ready, checking every 0.1 sec, 2 sec max
+-----------------------------------------------------------------------------------------------
 
 function AfYesSir:Press()
 	if self.topress == 0 then
@@ -260,18 +289,24 @@ function AfYesSir:Press()
 end
 
 
+-----------------------------------------------------------------------------------------------
+-- AfYesSir log: print strMeldung to system chat
+-----------------------------------------------------------------------------------------------
+
 function AfYesSir:log(strMeldung)
 	if strMeldung == nil then strMeldung = "nil" end
 	ChatSystemLib.PostOnChannel(ChatSystemLib.ChatChannel_System, strMeldung, "afYesSir")
 end
 
+
 -----------------------------------------------------------------------------------------------
 -- AfYesSirForm Functions
 -----------------------------------------------------------------------------------------------
+
 -- when the OK button is clicked
 function AfYesSir:OnOK()
-	self.wndMain:Close()
 	self.doTravel = self.wndMain:FindChild("chkTransport"):IsChecked()
+	self.wndMain:Close()
 end
 
 -- when the Cancel button is clicked
@@ -279,6 +314,7 @@ function AfYesSir:OnCancel()
 	self.wndMain:Close()
 end
 
+-- when "start menu" button is pressed or slash command was entered
 function AfYesSir:Configure()
 	if self.wndMain:IsShown() then 
 		self.wndMain:Close() 
@@ -288,7 +324,6 @@ function AfYesSir:Configure()
 	
 	self.wndMain:FindChild("chkTransport"):SetCheck(self.doTravel)
 end
-
 
 
 -----------------------------------------------------------------------------------------------
