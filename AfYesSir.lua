@@ -149,6 +149,7 @@ function AfYesSir:OnLoad()
     -- load our form file
 	self.xmlDoc = XmlDoc.CreateFromFile("AfYesSir.xml")
 	self.xmlDoc:RegisterCallback("OnDocLoaded", self)
+	Apollo.LoadSprites("AfYesSirSprite.xml", "AfYesSirSprite")
 end
 
 
