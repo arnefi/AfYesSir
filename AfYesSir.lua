@@ -239,15 +239,31 @@ end
 -- AfYesSir BuildYesNo: test whether to react on window, otherwise call original function
 -----------------------------------------------------------------------------------------------
 
-function AfYesSir:BuildYesNo(something, tActiveCSI)
+function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
+	-- bShow
 	-- print question to sytem chat. To be removed in later versions.
-	self:log(tActiveCSI.strContext)
-	if self:ShoudIPress(tActiveCSI.strContext) then
-		self.topress = 20
-		self.presstimer:Start()			
+	if bShow == nil then
+		self:log(tActiveCSI.strContext)
+		if self:ShoudIPress(tActiveCSI.strContext) then
+			self.topress = 20
+			self.presstimer:Start()			
+		else
+			self.topress = 0
+			self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI)
+		end
 	else
-		self.topress = 0
-		self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
+		if bShow then
+			self:log(tActiveCSI.strContext)
+			if self:ShoudIPress(tActiveCSI.strContext) then
+				self.topress = 20
+				self.presstimer:Start()			
+			else
+				self.topress = 0
+				self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
+			end
+		else 
+			self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
+		end
 	end
 end
 
