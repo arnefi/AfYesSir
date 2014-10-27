@@ -13,7 +13,7 @@ require "CSIsLib"
 -----------------------------------------------------------------------------------------------
 
 -- local AfYesSir = {} 
-AfYesSir = Apollo.GetPackage("Gemini:Addon-1.0").tPackage:NewAddon("AfYesSir", false, {}, "Gemini:Hook-1.0")
+AfYesSir = Apollo.GetPackage("Gemini:Addon-1.1").tPackage:NewAddon("AfYesSir", false, {}, "Gemini:Hook-1.0")
 -- local L = Apollo.GetPackage("Gemini:Locale-1.0").tPackage:GetLocale("AfYesSir", true)
 
  
@@ -239,18 +239,14 @@ end
 -- AfYesSir BuildYesNo: test whether to react on window, otherwise call original function
 -----------------------------------------------------------------------------------------------
 
-function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
-	if (bShow) then
-		-- print question to sytem chat. To be removed in later versions.
-		self:log(tActiveCSI.strContext)
-		if self:ShoudIPress(tActiveCSI.strContext) then
-			self.topress = 20
-			self.presstimer:Start()			
-		else
-			self.topress = 0
-			self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
-		end
+function AfYesSir:BuildYesNo(something, tActiveCSI)
+	-- print question to sytem chat. To be removed in later versions.
+	self:log(tActiveCSI.strContext)
+	if self:ShoudIPress(tActiveCSI.strContext) then
+		self.topress = 20
+		self.presstimer:Start()			
 	else
+		self.topress = 0
 		self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
 	end
 end
