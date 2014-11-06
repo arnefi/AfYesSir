@@ -108,6 +108,12 @@ local tTravel = {
 	582460, -- Leave the Enigma Chamber?
 	582461, -- Take the elevator to the Enigma Chamber?
 	582462, -- Take the elevator to the Reception Room?
+	
+	-- R-12-Event in Malgrave
+	433640, -- Would you like to go to Camp Devotion?
+	
+	-- Genesis-Attunement
+	583293, --Deploy to Farside
 }
 
 local strVersion = "@project-version@"
@@ -126,6 +132,7 @@ function AfYesSir:new(o)
 	
 	-- category defaults
 	o.doTravel = true
+	o.doTeleport = false
 
     return o
 end
@@ -171,6 +178,7 @@ function AfYesSir:OnDocLoaded()
 		local L = Apollo.GetPackage("Gemini:Locale-1.0").tPackage:GetLocale("AfYesSir", true)
 		self.wndMain:FindChild("lblDescription"):SetText(L["lblDescription"])
 		self.wndMain:FindChild("chkTransport"):SetText(L["chkTransport"])
+		self.wndMain:FindChild("chkTeleport"):SetText(L["chkTeleport"])
 		self.wndMain:FindChild("lblVersion"):SetText(strVersion)
 			
 		-- if the xmlDoc is no longer needed, you should set it to nil
@@ -185,6 +193,7 @@ function AfYesSir:OnDocLoaded()
 
 		self.timer = ApolloTimer.Create(10.0, false, "DelayHook", self)
 		self.presstimer = ApolloTimer.Create(0.1, true, "Press", self)
+		self.delaypresstimer = ApolloTimer.Create(1.2, false, "DelayPress", self)
 		
 		-- Do additional Addon initialization here
 	end
@@ -208,6 +217,7 @@ function AfYesSir:OnSave(eType)
 	if eType == GameLib.CodeEnumAddonSaveLevel.Character then
 		local tSavedData = {}
 		tSavedData.doTravel = self.doTravel
+		tSavedData.doTeleport = self.doTeleport
 		return tSavedData
 	end
 	return
@@ -221,6 +231,7 @@ end
 function AfYesSir:OnRestore(eType, tSavedData)
 	if eType == GameLib.CodeEnumAddonSaveLevel.Character then
 		if tSavedData.doTravel ~= nil then self.doTravel = tSavedData.doTravel end
+		if tSavedData.doTeleport ~= nil then self.doTeleport = tSavedData.doTeleport end
 	end
 end
 
@@ -244,9 +255,13 @@ function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
 	-- print question to sytem chat. To be removed in later versions.
 	if bShow == nil then
 		self:log(tActiveCSI.strContext)
-		if self:ShoudIPress(tActiveCSI.strContext) then
-			self.topress = 20
-			self.presstimer:Start()			
+		if self:ShouldIPress(tActiveCSI.strContext) then
+			if self.delay then
+				self.delaypresstimer:Start()
+			else
+				self.topress = 20
+				self.presstimer:Start()
+			end
 		else
 			self.topress = 0
 			self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI)
@@ -254,9 +269,13 @@ function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
 	else
 		if bShow then
 			self:log(tActiveCSI.strContext)
-			if self:ShoudIPress(tActiveCSI.strContext) then
-				self.topress = 20
-				self.presstimer:Start()			
+			if self:ShouldIPress(tActiveCSI.strContext) then
+				if self.delay then
+					self.delaypresstimer:Start()
+				else
+					self.topress = 20
+					self.presstimer:Start()
+				end
 			else
 				self.topress = 0
 				self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
@@ -268,15 +287,28 @@ function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
 end
 
 
+function AfYesSir:DelayPress()
+	self.topress = 20
+	self.delay = false
+	self.presstimer:Start()			
+end
+
 -----------------------------------------------------------------------------------------------
 -- AfYesSir ShouldIPress: check for strMessage in our category tables
 -----------------------------------------------------------------------------------------------
 
-function AfYesSir:ShoudIPress(strMessage)
+function AfYesSir:ShouldIPress(strMessage)
 	-- Category Transportation
 	if self.doTravel then
 		for _, id in pairs(tTravel) do
 			if strMessage == Apollo.GetString(id) then return true end
+		end
+	end
+	-- 566350;Teleport to your group member?
+	if self.doTeleport then
+		if strMessage == Apollo.GetString(566350) then 
+			self.delay = true
+			return true 
 		end
 	end
 	return false
@@ -319,6 +351,7 @@ end
 -- when the OK button is clicked
 function AfYesSir:OnOK()
 	self.doTravel = self.wndMain:FindChild("chkTransport"):IsChecked()
+	self.doTeleport = self.wndMain:FindChild("chkTeleport"):IsChecked()
 	self.wndMain:Close()
 end
 
@@ -336,6 +369,7 @@ function AfYesSir:Configure()
 	self.wndMain:Invoke()
 	
 	self.wndMain:FindChild("chkTransport"):SetCheck(self.doTravel)
+	self.wndMain:FindChild("chkTeleport"):SetCheck(self.doTeleport)
 end
 
 
