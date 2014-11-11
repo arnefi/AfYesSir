@@ -46,7 +46,6 @@ local tTravel = {
 	424937, -- Illium
 	424938, -- Thayd
 	425940, -- Whitevale
-	435622, -- Wilderrun
 	447312, -- Galactic Observer
 	452812, -- Mayday Expedition
 	467064, -- Malgrave
@@ -57,9 +56,18 @@ local tTravel = {
 	530731, -- Illium
 	537969, -- Crimson Badlands
 	537970, -- Travel to Illium?
-	537971, -- Travel to Crimson Badlands?
 	537972, -- Travel to Thayd?	
 	573453, -- Travel to Grimveil Enclave?
+	622294, -- Travel to Quiet Mound?
+	625474, -- Travel to Deadman's Landing?
+	625475, -- Travel to High Stakes?	
+	627593, -- Travel to Crimson Badlands?
+	627615, -- Travel to Farside?
+	627624, -- Travel to Grimvault?
+	627626, -- Travel to Northern Wastes?
+	627634, -- Travel to Whitevale?
+	627636, -- Travel to Malgrave?
+	627640, -- Travel to Wilderrun?
 	
 	-- teleport.*\?$
 	314866, -- Teleport to Palerock Post in Northwest Whitevale?
@@ -250,39 +258,18 @@ end
 -- AfYesSir BuildYesNo: test whether to react on window, otherwise call original function
 -----------------------------------------------------------------------------------------------
 
-function AfYesSir:BuildYesNo(something, tActiveCSI, bShow)
-	-- bShow
-	-- print question to sytem chat. To be removed in later versions.
-	if bShow == nil then
-		self:log(tActiveCSI.strContext)
-		if self:ShouldIPress(tActiveCSI.strContext) then
-			if self.delay then
-				self.delaypresstimer:Start()
-			else
-				self.topress = 20
-				self.presstimer:Start()
-			end
+function AfYesSir:BuildYesNo(something, tActiveCSI)
+	self:log(tActiveCSI.strContext)
+	if self:ShouldIPress(tActiveCSI.strContext) then
+		if self.delay then
+			self.delaypresstimer:Start()
 		else
-			self.topress = 0
-			self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI)
+			self.topress = 20
+			self.presstimer:Start()
 		end
 	else
-		if bShow then
-			self:log(tActiveCSI.strContext)
-			if self:ShouldIPress(tActiveCSI.strContext) then
-				if self.delay then
-					self.delaypresstimer:Start()
-				else
-					self.topress = 20
-					self.presstimer:Start()
-				end
-			else
-				self.topress = 0
-				self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
-			end
-		else 
-			self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI, bShow)
-		end
+		self.topress = 0
+		self.hooks[Apollo.GetAddon("CSI")].BuildYesNo(something, tActiveCSI)
 	end
 end
 
