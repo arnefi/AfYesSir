@@ -117,6 +117,12 @@ local tTravel = {
 	582461, -- Take the elevator to the Enigma Chamber?
 	582462, -- Take the elevator to the Reception Room?
 	
+	-- Illium
+	626315, -- Enter Mondo's Gadget-o-polis?
+	626643, -- Exit Mondo's Gadget-o-polis?
+	626454, -- Enter Kezrek's War Room?
+	626644, -- Exit Kezrek's War Room?	
+	
 	-- R-12-Event in Malgrave
 	433640, -- Would you like to go to Camp Devotion?
 	
