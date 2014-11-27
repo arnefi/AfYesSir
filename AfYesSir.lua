@@ -130,6 +130,12 @@ local tTravel = {
 	583293, --Deploy to Farside
 }
 
+local tEventsNo = {
+	543008, -- The "Siege of the Lightspire" event has begun! Want a brief explanation of the current objective?
+	543010, -- The "Siege of the Lightspire" event's third phase is underway. Want a brief explanation of the objective?
+	543011  --  "Siege of the Lightspire" event's fourth phase is underway. Want a brief explanation of the objective?	
+}
+
 local strVersion = "@project-version@"
 
 
@@ -147,6 +153,7 @@ function AfYesSir:new(o)
 	-- category defaults
 	o.doTravel = true
 	o.doTeleport = false
+	o.doLightspire = true
 
     return o
 end
@@ -232,6 +239,7 @@ function AfYesSir:OnSave(eType)
 		local tSavedData = {}
 		tSavedData.doTravel = self.doTravel
 		tSavedData.doTeleport = self.doTeleport
+		tSavedData.doLightspire = self.doLightspire
 		return tSavedData
 	end
 	return
@@ -246,6 +254,7 @@ function AfYesSir:OnRestore(eType, tSavedData)
 	if eType == GameLib.CodeEnumAddonSaveLevel.Character then
 		if tSavedData.doTravel ~= nil then self.doTravel = tSavedData.doTravel end
 		if tSavedData.doTeleport ~= nil then self.doTeleport = tSavedData.doTeleport end
+		if tSavedData.doLightspire ~= nil then self.doLightspire = tSavedData.doLightspire end
 	end
 end
 
@@ -291,6 +300,7 @@ end
 -----------------------------------------------------------------------------------------------
 
 function AfYesSir:ShouldIPress(strMessage)
+	self.presswhat = true
 	-- Category Transportation
 	if self.doTravel then
 		for _, id in pairs(tTravel) do
@@ -302,6 +312,14 @@ function AfYesSir:ShouldIPress(strMessage)
 		if strMessage == Apollo.GetString(566350) then 
 			self.delay = true
 			return true 
+		end
+	end
+	if self.doLightspire then
+		for _, id in pairs(tEventsNo) do
+			if strMessage == Apollo.GetString(id) then
+				self.presswhat = false
+				return true 
+			end
 		end
 	end
 	return false
@@ -319,7 +337,7 @@ function AfYesSir:Press()
 	end
 	local tCSI = CSIsLib.GetActiveCSI()
 	if tCSI and CSIsLib.IsCSIRunning() then
-        CSIsLib.CSIProcessInteraction(true)
+        CSIsLib.CSIProcessInteraction(self.presswhat)
 		self.topress = 0
 		return
     end	
@@ -345,6 +363,7 @@ end
 function AfYesSir:OnOK()
 	self.doTravel = self.wndMain:FindChild("chkTransport"):IsChecked()
 	self.doTeleport = self.wndMain:FindChild("chkTeleport"):IsChecked()
+	self.doLightspire = self.wndMain:FindChild("chkLightspire"):IsChecked()
 	self.wndMain:Close()
 end
 
@@ -363,6 +382,7 @@ function AfYesSir:Configure()
 	
 	self.wndMain:FindChild("chkTransport"):SetCheck(self.doTravel)
 	self.wndMain:FindChild("chkTeleport"):SetCheck(self.doTeleport)
+	self.wndMain:FindChild("chkLightspire"):SetCheck(self.doLightspire)
 end
 
 
