@@ -132,6 +132,7 @@ local tTravel = {
 
 local tEventsNo = {
 	543008, -- The "Siege of the Lightspire" event has begun! Want a brief explanation of the current objective?
+	595014, -- The "Siege of the Lightspire" event's second phase is underway. Want a brief explanation of the objective?
 	543010, -- The "Siege of the Lightspire" event's third phase is underway. Want a brief explanation of the objective?
 	543011  --  "Siege of the Lightspire" event's fourth phase is underway. Want a brief explanation of the objective?	
 }
