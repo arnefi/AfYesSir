@@ -134,7 +134,17 @@ local tEventsNo = {
 	543008, -- The "Siege of the Lightspire" event has begun! Want a brief explanation of the current objective?
 	595014, -- The "Siege of the Lightspire" event's second phase is underway. Want a brief explanation of the objective?
 	543010, -- The "Siege of the Lightspire" event's third phase is underway. Want a brief explanation of the objective?
-	543011  --  "Siege of the Lightspire" event's fourth phase is underway. Want a brief explanation of the objective?	
+	543011  -- "Siege of the Lightspire" event's fourth phase is underway. Want a brief explanation of the objective?	
+	608730, -- Let's rethink this.
+	608731, -- You are the worst.
+	608732, -- So you will let me go?
+}
+
+local tEventsYes = {
+	608727, -- Apply the Anti-Techno-Virus?
+	608728, -- Are you sure about that?
+	608729, -- Why not?
+	608733, -- You're just going to apply it anways...
 }
 
 local strVersion = "@project-version@"
@@ -316,6 +326,11 @@ function AfYesSir:ShouldIPress(strMessage)
 		end
 	end
 	if self.doLightspire then
+		for _, id in pairs(tEventsYesdo
+			if strMessage == Apollo.GetString(id) then
+				return true 
+			end
+		end
 		for _, id in pairs(tEventsNo) do
 			if strMessage == Apollo.GetString(id) then
 				self.presswhat = false
