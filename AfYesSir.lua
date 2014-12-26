@@ -138,6 +138,10 @@ local tEventsNo = {
 	608730, -- Let's rethink this.
 	608731, -- You are the worst.
 	608732, -- So you will let me go?
+	232093, -- Do you swear that hot beverages are enjoyable and provide incentive to employees?
+	230032, -- Are you literate?
+	232099, -- Have you ever experienced the urge to give up a life of worldly goods and donate your assets to charity?
+	232100, -- Are you allergic to gold, silver, copper, platinum, or other common elements used in trading commodities?
 }
 
 local tEventsYes = {
@@ -145,6 +149,9 @@ local tEventsYes = {
 	608728, -- Are you sure about that?
 	608729, -- Why not?
 	608733, -- You're just going to apply it anways...
+	232102, -- Are you a fully licensed representative of the Dominion?
+	232098, -- Are you legally permitted to handle all forms of currency used for the exchange of goods and services?
+	232101, -- Will you lend me a gold?
 }
 
 local strVersion = "@project-version@"
@@ -211,6 +218,7 @@ function AfYesSir:OnDocLoaded()
 		self.wndMain:FindChild("lblDescription"):SetText(L["lblDescription"])
 		self.wndMain:FindChild("chkTransport"):SetText(L["chkTransport"])
 		self.wndMain:FindChild("chkTeleport"):SetText(L["chkTeleport"])
+		self.wndMain:FindChild("chkLightspire"):SetText(L["chkLightspire"])
 		self.wndMain:FindChild("lblVersion"):SetText(strVersion)
 			
 		-- if the xmlDoc is no longer needed, you should set it to nil

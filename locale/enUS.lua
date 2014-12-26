@@ -3,3 +3,4 @@ if not L then return end
 L["lblDescription"] = "Automatically answer questions about"
 L["chkTransport"] = "Transportation"
 L["chkTeleport"] = "Teleportation"
+L["chkLightspire"] = "Lightspire explanations and some quests"
