@@ -128,6 +128,13 @@ local tTravel = {
 	
 	-- Genesis-Attunement
 	583293, --Deploy to Farside
+	
+	460152, -- Enter the Fist of Azrion?
+	460153, -- Exit the Fist of Azrion?
+	460154, -- Enter top secret cargo hold Department YYZ?
+	460155, -- Exit Department YYZ?
+	585144, -- Enter the New Imperial Museum of Illium?
+	585145, -- Return to Spaceport Alpha in Illium?	
 }
 
 local tEventsNo = {
@@ -142,6 +149,9 @@ local tEventsNo = {
 	230032, -- Are you literate?
 	232099, -- Have you ever experienced the urge to give up a life of worldly goods and donate your assets to charity?
 	232100, -- Are you allergic to gold, silver, copper, platinum, or other common elements used in trading commodities?
+	442236, -- The traditional punishment for this crime is a day in the stocks. Do you deem this appropriate for his crime?
+	442255, -- Normally, we would banish him from the priesthood and place him on a prison fleet. Does this sound reasonable?
+	442257, -- This woman is accused of high treason. An example must be made. Shall we arrange for her public execution?
 }
 
 local tEventsYes = {
@@ -152,6 +162,10 @@ local tEventsYes = {
 	232102, -- Are you a fully licensed representative of the Dominion?
 	232098, -- Are you legally permitted to handle all forms of currency used for the exchange of goods and services?
 	232101, -- Will you lend me a gold?
+	326816, -- Do you have a name?
+	326817, -- Do you have a favorite color?
+	326818, -- Perhaps your favorite color is red?
+	326819, -- May I have your Protostar Assigned Identificationary Nano-Numeral?
 }
 
 local strVersion = "@project-version@"
