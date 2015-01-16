@@ -152,6 +152,9 @@ local tEventsNo = {
 	442236, -- The traditional punishment for this crime is a day in the stocks. Do you deem this appropriate for his crime?
 	442255, -- Normally, we would banish him from the priesthood and place him on a prison fleet. Does this sound reasonable?
 	442257, -- This woman is accused of high treason. An example must be made. Shall we arrange for her public execution?
+	590336, -- There are five primal elements.
+	590342, -- If a snoglug crawls halfway around a circle then turns around and crawls halfway back, is it now back where it started?
+	590354, -- Is the Archon's name Omechron?
 }
 
 local tEventsYes = {
@@ -166,6 +169,8 @@ local tEventsYes = {
 	326817, -- Do you have a favorite color?
 	326818, -- Perhaps your favorite color is red?
 	326819, -- May I have your Protostar Assigned Identificationary Nano-Numeral?
+	590352, -- Eldan Society is divided and represented through the six orders.
+	590341, -- Are you a god?
 }
 
 local strVersion = "@project-version@"
